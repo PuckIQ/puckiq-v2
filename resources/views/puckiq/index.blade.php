@@ -1,0 +1,21 @@
+@extends('layouts.app')
+
+@section('content')
+    @switch(Request::path())
+        @case('players/boxcars')
+          @include('puckiq.players.boxcars')
+          @break
+        @case('players/wowy')
+          @include('puckiq.players.wowy')
+          @break
+        @case('players/woodmoney')
+          @include('puckiq.players.woodmoney')
+          @break
+        @case('puckiq/teams/boxcars')
+          @break
+        @case('puckiq/teams/woodmoney')
+          @break
+        @default
+          @break;
+    @endswitch
+@endsection
