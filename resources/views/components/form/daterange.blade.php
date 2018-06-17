@@ -1,7 +1,7 @@
 <div class="form-group">
-  {{ Form::label($name1, $label, ['class' => 'control-label']) }}
+  {{ Form::label($name.'start', $label, ['class' => 'control-label']) }}
   <div class="input-group">
-    {{ Form::date($name1, $value1, array_merge(['class' => 'form-control'], $attributes)) }}
-    {{ Form::date($name2, $value2, array_merge(['class' => 'form-control'], $attributes)) }}
+    {{ Form::date($name.'start', $value, array_merge(['class' => 'form-control', 'id' => 'pq-datestart'], $attributes)) }}
+    {{ Form::date($name.'end', $value, array_merge(['class' => 'form-control', 'id' => 'pq-dateend'], $attributes)) }}
   </div>
 </div>

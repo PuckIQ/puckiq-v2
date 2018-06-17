@@ -21,5 +21,6 @@
 
   <script src="/js/app.js"></script>
   @include('components.external.js')
+  @yield('scripts')
 </body>
 </html>
