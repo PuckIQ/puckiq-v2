@@ -3,5 +3,6 @@
  */
 
 try {
-  require('select2');
+  /*require('select2');*/
+  require('bootstrap-select');
 } catch (e) { }
