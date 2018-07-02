@@ -15,6 +15,7 @@ class FormServiceProvider extends ServiceProvider
     public function boot()
     {
         Form::component('bsText', 'components.form.text', ['label', 'name', 'value' => null, 'attributes' => []]);
+        Form::component('bsTypeahead', 'components.form.typeahead', ['label', 'name', 'value' => null, 'attributes' => []]);
         Form::component('bsNumber', 'components.form.number', ['label', 'name', 'value' => null, 'attributes' => []]);
         #Form::component('bsDate', 'components.form.daterange', ['label', 'name1', 'name2', 'value1' => null, 'value2' => null, 'attributes1' => [], 'attributes2' => []]);
         Form::component('bsDate', 'components.form.daterange', ['label', 'name', 'value' => null, 'attributes' => []]);

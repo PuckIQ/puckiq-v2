@@ -7,10 +7,10 @@
     {!! Form::open(['action' => 'PlayerWowyController@store', 'method' => 'POST', 'id' => 'wowyform']) !!}
       <div class="row">
         <div class="col-md-4 col-lg-3">
-          {{ Form::bsText('Player 1', 'q2player1id', null, ['placeholder' => 'Player Name...', 'id' => 'pq-player1name', 'data-provide' => 'typeahead', 'autocomplete' => 'off']) }}
+          {{ Form::bsTypeahead('Player 1', 'q2player1id', null, ['placeholder' => 'Player Name...', 'id' => 'pq-player1name', 'data-provide' => 'typeahead', 'autocomplete' => 'off']) }}
         </div>
         <div class="col-md-4 col-lg-3">
-          {{ Form::bsSelect('Player 2', 'q2player2id', [], ['placeholder' => 'Player Name...', 'id' => 'pq-player2name']) }}
+          {{ Form::bsTypeahead('Player 2', 'q2player2id', null, ['placeholder' => 'Player Name...', 'id' => 'pq-player2name', 'data-provide' => 'typeahead', 'autocomplete' => 'off']) }}
         </div>
         <div class="col-md-4 col-lg-3">
           {{ Form::bsNumber('Minimum TOI', 'q3toi', '50', []) }}
@@ -19,7 +19,7 @@
           {{ Form::bsDate('By Date Range', 'q1date', '', []) }}
         </div>
         <div class="col-md-4 col-lg-3">
-          {{ Form::bsSelect('By Season', 'season', [], ['placeholder' => 'Season...', 'id' => 'pq-season']) }}
+          {{ Form::bsSelect('By Season', 'q2season', [], ['id' => 'pq-season', 'multiple' => 'multiple']) }}
         </div>
         <div class="col-md-4 col-lg-3">
           {{ Form::bsSelect('By Position', 'q3postype[]', [], ['id' => 'pq-postype', 'multiple' => 'multiple']) }}
@@ -56,6 +56,32 @@
           autoSelect: true,
           displayText: function (item) {
             return item.fullName;
+          },
+          afterSelect: function(item) {
+            $('#q2player1id_val').val(item.playerid)
+          }
+        });
+
+        $('#pq-player2name').typeahead({
+          source: function(request, response) {
+            $.ajax({
+              url: 'http://api.puckiq.org/puckiq/0/players/getPlayerSearch',
+              dataType: 'json',
+              data: {
+                fullName: $('#pq-player2name').val()
+              },
+              success: function(data) {
+                console.log(data);
+                response(data);
+              }
+            });
+          },
+          autoSelect: true,
+          displayText: function (item) {
+            return item.fullName;
+          },
+          afterSelect: function(item) {
+            $('#q2player2id_val').val(item.playerid)
           }
         });
 
@@ -75,6 +101,11 @@
           { id: 'D', text: 'Dangerous' },
           { id: 'A', text: 'Score Adjusted' },
           { id: 'Z', text: 'Zone Start' }
+        ];
+
+        var seasons = [
+          '20162017',
+          '20172018'
         ];
 
         $('#q1date')
@@ -115,12 +146,26 @@
           );
         })
 
+        $.each(seasons, function(key, value) {
+          $('#pq-season')
+            .append($('<option></option>')
+              .prop('value', value)
+              .text(value)
+            );
+        })
+
         $('#pq-postype').selectpicker({
           noneSelectedText: 'Position...',
           style: 'puckiq-select'
         });
+
         $('#pq-stattype').selectpicker({
           noneSelectedText: 'Display Stat...',
+          style: 'puckiq-select'
+        });
+
+        $('#pq-season').selectpicker({
+          noneSelectedText: 'Season...',
           style: 'puckiq-select'
         });
 
