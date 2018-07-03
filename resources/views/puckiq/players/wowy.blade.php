@@ -7,16 +7,16 @@
     {!! Form::open(['action' => 'PlayerWowyController@store', 'method' => 'POST', 'id' => 'wowyform']) !!}
       <div class="row">
         <div class="col-md-4 col-lg-3">
-          {{ Form::bsTypeahead('Player 1', 'q2player1id', null, ['placeholder' => 'Player Name...', 'id' => 'pq-player1name', 'data-provide' => 'typeahead', 'autocomplete' => 'off']) }}
+          {{ Form::bsTypeahead('Player 1', 'player1id', null, ['placeholder' => 'Player Name...', 'id' => 'pq-player1name', 'data-provide' => 'typeahead', 'autocomplete' => 'off']) }}
         </div>
         <div class="col-md-4 col-lg-3">
-          {{ Form::bsTypeahead('Player 2', 'q2player2id', null, ['placeholder' => 'Player Name...', 'id' => 'pq-player2name', 'data-provide' => 'typeahead', 'autocomplete' => 'off']) }}
+          {{ Form::bsTypeahead('Player 2', 'player2id', null, ['placeholder' => 'Player Name...', 'id' => 'pq-player2name', 'data-provide' => 'typeahead', 'autocomplete' => 'off']) }}
         </div>
         <div class="col-md-4 col-lg-3">
           {{ Form::bsNumber('Minimum TOI', 'q3toi', '50', []) }}
         </div>
         <div class="col-md-4 col-lg-3">
-          {{ Form::bsDate('By Date Range', 'q1date', '', []) }}
+          {{ Form::bsDate('By Date Range', 'date', '', []) }}
         </div>
         <div class="col-md-4 col-lg-3">
           {{ Form::bsSelect('By Season', 'q2season', [], ['id' => 'pq-season', 'multiple' => 'multiple']) }}
@@ -33,6 +33,29 @@
       </div>
     {!! Form::close() !!}
   </div>
+
+  @if (isset($playerName))
+      @php
+        $withWithout = array(
+          array(
+            'id' => 'pq-1w2',
+            'type' => '1 and 2',
+            'title' => 'Player X with ' . $playerName
+          ),
+          array(
+            'id' => 'pq-1wo2',
+            'type' => '1 not 2',
+            'title' => 'Player X without ' . $playerName
+          ),
+          array(
+            'id' => 'pq-2wo1',
+            'type' => '2 not 1',
+            'title' => $playerName . ' without Player X'
+          )
+        );
+      @endphp
+      @include('tables.playerwowy', ['withWithout' => $withWithout, 'playerName' => $playerName, 'playerWowy' => $playerWowy])
+  @endif
 </div>
 
 @section('scripts')
@@ -108,7 +131,7 @@
           '20172018'
         ];
 
-        $('#q1date')
+        $('#q0date')
           .daterangepicker({
             opens: 'left',
             autoUpdateInput: false,

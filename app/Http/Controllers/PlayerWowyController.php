@@ -36,6 +36,27 @@ class PlayerWowyController extends Controller
     public function store(Request $request)
     {
         //
+        $strQ = "?";
+        $playername = null;
+        foreach($_POST as $key => $val) {
+            switch(substr($key, 0, 2)) {
+                case "q0":
+                    if($key == 'q0player1id')
+                        $playername = $val;
+                    break;
+                case "q1":
+                case "q2":
+                    $strQ .= ($val != "") ? $key . '=' . $val . "&" : "";
+                    break;
+            }
+        }
+        $url = "http://172.19.0.1:3001/puckiq/0/schedule/getRangeWowy" . trim($strQ, "&");
+
+        $playerWowy = json_decode(self::APIConnect($url));
+        return view('puckiq.index')
+            ->with('playerWowy', $playerWowy)
+            ->with('playerName', $playername);
+
     }
 
     /**
@@ -81,5 +102,11 @@ class PlayerWowyController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private static function APIConnect($url){
+        $client = new \GuzzleHttp\Client();
+        $res = $client->request('GET', $url);
+        return $res->getBody();
     }
 }
